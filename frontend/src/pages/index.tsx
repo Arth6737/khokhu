@@ -1,9 +1,32 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
+import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    try {
+      (async () => {
+        const response = await fetch(
+          "http://localhost:8080/get-details",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setData(await response.json());
+      })();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  console.log(data)
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
